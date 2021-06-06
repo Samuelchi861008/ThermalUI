@@ -1,38 +1,39 @@
 # -*- coding: utf-8 -*-
-from PyQt5 import QtCore, QtGui, QtWidgets
+import sys
 import datetime
-
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 480)
-        MainWindow.setStyleSheet("background-color: rgb(129, 50, 52);")
+        MainWindow.resize(800, 480) # 設定視窗大小
+        MainWindow.setStyleSheet("background-color: rgb(129, 50, 52);") # 設定背景顏色
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
         self.Title = QtWidgets.QLabel(self.centralwidget)
         self.Title.setGeometry(QtCore.QRect(19, 10, 761, 51))
         font = QtGui.QFont()
         font.setFamily("Hannotate TC")
-        font.setPointSize(36)
+        font.setPointSize(36) # 設定標題大小
         font.setBold(True)
-        font.setWeight(60)
+        font.setWeight(60) # 設定標題粗細
         self.Title.setFont(font)
         self.Title.setAutoFillBackground(False)
-        self.Title.setStyleSheet("color: rgb(255, 255, 255)")
+        self.Title.setStyleSheet("color: rgb(255, 255, 255)") # 設定標題顏色
         self.Title.setAlignment(QtCore.Qt.AlignCenter)
         self.Title.setObjectName("Title")
 
         self.NTNULogo = QtWidgets.QLabel(self.centralwidget)
         self.NTNULogo.setGeometry(QtCore.QRect(10, 420, 261, 51))
         self.NTNULogo.setText("")
-        self.NTNULogo.setPixmap(QtGui.QPixmap("img/NB_NTNU_logo.png"))
+        self.NTNULogo.setPixmap(QtGui.QPixmap("img/NB_NTNU_logo.png")) # 設定引入師大 logo 圖片
         self.NTNULogo.setObjectName("NTNULogo")
 
         self.Video = QtWidgets.QLabel(self.centralwidget)
         self.Video.setGeometry(QtCore.QRect(10, 80, 771, 331))
         self.Video.setText("")
-        self.Video.setPixmap(QtGui.QPixmap("img/QRCodeDemo.png"))
+        self.Video.setPixmap(QtGui.QPixmap("img/QRCodeDemo.png")) # 設定引入即時影像
         self.Video.setObjectName("Video")
 
         self.Status = QtWidgets.QLabel(self.centralwidget)
@@ -43,9 +44,9 @@ class Ui_MainWindow(object):
         self.StatusText = QtWidgets.QLabel(self.centralwidget)
         self.StatusText.setGeometry(QtCore.QRect(610, 375, 131, 20))
         font = QtGui.QFont()
-        font.setPointSize(14)
+        font.setPointSize(14) # 設定狀態框文字大小
         font.setBold(True)
-        font.setWeight(70)
+        font.setWeight(70) # 設定狀態框文字粗細
         self.StatusText.setFont(font)
         self.StatusText.setStyleSheet("background-color:transparent;")
         self.StatusText.setAlignment(QtCore.Qt.AlignCenter)
@@ -55,17 +56,18 @@ class Ui_MainWindow(object):
         self.DateTimeArea.setGeometry(QtCore.QRect(20, 80, 201, 121))
         self.DateTimeArea.setStyleSheet("background-color: transparent;")
         self.DateTimeArea.setText("")
-        self.DateTimeArea.setPixmap(QtGui.QPixmap("img/area.png"))
+        self.DateTimeArea.setPixmap(QtGui.QPixmap("img/area.png")) # 設定引入日期時間底框圖片
         self.DateTimeArea.setObjectName("DateTimeArea")
+
         self.DateText = QtWidgets.QLabel(self.centralwidget)
         self.DateText.setGeometry(QtCore.QRect(20, 110, 201, 20))
         font = QtGui.QFont()
         font.setFamily("Hannotate TC")
-        font.setPointSize(16)
+        font.setPointSize(16) # 設定日期文字大小
         font.setBold(True)
-        font.setWeight(75)
+        font.setWeight(75) # 設定日期文字粗細
         self.DateText.setFont(font)
-        self.DateText.setStyleSheet("background-color: transparent; color:white;")
+        self.DateText.setStyleSheet("background-color: transparent; color:white;") # 設定日期文字顏色
         self.DateText.setAlignment(QtCore.Qt.AlignCenter)
         self.DateText.setObjectName("DateText")
 
@@ -73,24 +75,24 @@ class Ui_MainWindow(object):
         self.TimeText.setGeometry(QtCore.QRect(20, 150, 201, 31))
         font = QtGui.QFont()
         font.setFamily("Hannotate TC")
-        font.setPointSize(20)
+        font.setPointSize(20) # 設定時間文字大小
         font.setBold(True)
-        font.setWeight(75)
+        font.setWeight(75) # 設定時間文字粗細
         self.TimeText.setFont(font)
-        self.TimeText.setStyleSheet("background-color: transparent; color:white;")
+        self.TimeText.setStyleSheet("background-color: transparent; color:white;") # 設定時間文字顏色
         self.TimeText.setAlignment(QtCore.Qt.AlignCenter)
-        self.TimeText.setObjectName("label")
+        self.TimeText.setObjectName("TimeText")
 
-        self.location = QtWidgets.QLabel(self.centralwidget)
-        self.location.setGeometry(QtCore.QRect(710, 440, 71, 21))
+        self.Location = QtWidgets.QLabel(self.centralwidget)
+        self.Location.setGeometry(QtCore.QRect(710, 440, 71, 21))
         font = QtGui.QFont()
         font.setFamily("Hannotate TC")
-        font.setPointSize(12)
+        font.setPointSize(12) # 設定地點文字大小
         font.setBold(True)
-        font.setWeight(70)
-        self.location.setFont(font)
-        self.location.setStyleSheet("color:white")
-        self.location.setObjectName("label_2")
+        font.setWeight(70) # 設定地點文字粗細
+        self.Location.setFont(font)
+        self.Location.setStyleSheet("color:white") # 設定地點文字顏色
+        self.Location.setObjectName("Location")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -99,25 +101,27 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.Title.setText(_translate("MainWindow", "智慧額溫 2.0"))
+        self.Title.setText(_translate("MainWindow", "智慧額溫 2.0")) # 設定標題文字
 
         # self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_OK.png")) # OK Status
         self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_Error.png")) # Error Status
         self.StatusText.setText(_translate("MainWindow", "無效 QR Code")) # Status Text
 
+        # 設定日期與時間文字
         date = datetime.datetime.now().date()
         time = datetime.datetime.now().time()
         self.DateText.setText(_translate("MainWindow", "{} 年 {} 月 {} 日".format(date.year, date.month, date.day)))
         self.TimeText.setText(_translate("MainWindow", "{} : {}".format("0"+str(time.hour) if time.hour < 10 else time.hour, "0"+str(time.minute) if time.minute < 10 else time.minute)))
 
-        self.location.setText(_translate("MainWindow", "公館校區"))
+        # 設定地點文字
+        self.Location.setText(_translate("MainWindow", "公館校區"))
 
 
 if __name__ == "__main__":
-    import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
+    
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
