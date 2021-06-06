@@ -18,7 +18,6 @@ class VideoThread(QThread):
         while self._run_flag:
             ret, cv_img = cap.read()
             if ret:
-                cv_img = cv2.flip(cv_img, 1)
                 self.change_pixmap_signal.emit(cv_img)
         cap.release()
     
@@ -57,7 +56,7 @@ class Ui_MainWindow(object):
 
         self.cap = cv2.VideoCapture(0) # 讀入即時影像 (從camera)
         self.Video = QtWidgets.QLabel(self.centralwidget)
-        self.Video.setGeometry(QtCore.QRect(10, 80, 771, 331))
+        self.Video.setGeometry(QtCore.QRect(10, 80, 780, 331))
         self.Video.setText("")
         self.Video.setObjectName("Video")
 
@@ -152,6 +151,7 @@ class Ui_MainWindow(object):
     
     def convert_cv_qt(self, cv_img):
         rgb_image = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
+        rgb_image = cv2.flip(rgb_image, 1)
         h, w, ch = rgb_image.shape
         bytes_per_line = ch * w
         convert_to_Qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
