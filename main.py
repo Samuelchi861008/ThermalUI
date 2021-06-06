@@ -108,7 +108,7 @@ class Ui_MainWindow(object):
         date = datetime.datetime.now().date()
         time = datetime.datetime.now().time()
         self.DateText.setText(_translate("MainWindow", "{} 年 {} 月 {} 日".format(date.year, date.month, date.day)))
-        self.TimeText.setText(_translate("MainWindow", "{} : {}".format("0"+str(time.hour) if time.hour else time.hour, "0"+str(time.minute) if time.minute < 10 else time.minute)))
+        self.TimeText.setText(_translate("MainWindow", "{} : {}".format("0"+str(time.hour) if time.hour < 10 else time.hour, "0"+str(time.minute) if time.minute < 10 else time.minute)))
 
         self.location.setText(_translate("MainWindow", "公館校區"))
 
