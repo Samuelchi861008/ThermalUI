@@ -1,12 +1,37 @@
 # -*- coding: utf-8 -*-
 import sys
+import cv2
 import datetime
+import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QThread
+
+class VideoThread(QThread):
+    change_pixmap_signal = pyqtSignal(np.ndarray)
+
+    def __init__(self):
+        super().__init__()
+        self._run_flag = True
+
+    def run(self):
+        cap = cv2.VideoCapture(0)
+        while self._run_flag:
+            ret, cv_img = cap.read()
+            if ret:
+                cv_img = cv2.flip(cv_img, 1)
+                self.change_pixmap_signal.emit(cv_img)
+        cap.release()
+    
+    def stop(self):
+        self._run_flag = False
+        self.wait()
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+        self.disply_width = 800
+        self.display_height = 480
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 480) # 設定視窗大小
+        MainWindow.resize(self.disply_width, self.display_height) # 設定視窗大小
         MainWindow.setStyleSheet("background-color: rgb(129, 50, 52);") # 設定背景顏色
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -30,10 +55,10 @@ class Ui_MainWindow(object):
         self.NTNULogo.setPixmap(QtGui.QPixmap("img/NB_NTNU_logo.png")) # 設定引入師大 logo 圖片
         self.NTNULogo.setObjectName("NTNULogo")
 
+        self.cap = cv2.VideoCapture(0) # 讀入即時影像 (從camera)
         self.Video = QtWidgets.QLabel(self.centralwidget)
         self.Video.setGeometry(QtCore.QRect(10, 80, 771, 331))
         self.Video.setText("")
-        self.Video.setPixmap(QtGui.QPixmap("img/QRCodeDemo.png")) # 設定引入即時影像
         self.Video.setObjectName("Video")
 
         self.Status = QtWidgets.QLabel(self.centralwidget)
@@ -116,12 +141,33 @@ class Ui_MainWindow(object):
         # 設定地點文字
         self.Location.setText(_translate("MainWindow", "公館校區"))
 
+        # 設定即時影像
+        self.thread = VideoThread()
+        self.thread.change_pixmap_signal.connect(self.update_image)
+        self.thread.start()
+
+    def update_image(self, cv_img):
+        qt_img = self.convert_cv_qt(cv_img)
+        self.Video.setPixmap(qt_img)
+    
+    def convert_cv_qt(self, cv_img):
+        rgb_image = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
+        h, w, ch = rgb_image.shape
+        bytes_per_line = ch * w
+        convert_to_Qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
+        p = convert_to_Qt_format.scaled(self.disply_width, self.display_height, Qt.KeepAspectRatio)
+        return QtGui.QPixmap.fromImage(p)
+    
+    def closeEvent(self, event):
+        self.thread.stop()
+        event.accept()
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
-    
+
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
