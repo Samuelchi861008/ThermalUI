@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import cv2
+import time
 import datetime
 import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -20,6 +21,30 @@ class VideoThread(QThread):
             if ret:
                 self.change_pixmap_signal.emit(cv_img)
         cap.release()
+    
+    def stop(self):
+        self._run_flag = False
+        self.wait()
+
+class TimeThread(QThread):
+    show_time = pyqtSignal(str, str)
+
+    def __init__(self):
+        super().__init__()
+        self._run_flag = True
+    
+    def getNowDate(self):
+        date = datetime.datetime.now().date()
+        return "{} 年 {} 月 {} 日".format(date.year, date.month, date.day)
+    
+    def getNowTime(self):
+        time = datetime.datetime.now().time()
+        return "{} : {} : {}".format("0"+str(time.hour) if time.hour < 10 else time.hour, "0"+str(time.minute) if time.minute < 10 else time.minute, "0"+str(time.second) if time.second < 10 else time.second)
+    
+    def run(self):
+        while self._run_flag:
+            self.show_time.emit(self.getNowDate(), self.getNowTime())
+            time.sleep(1)
     
     def stop(self):
         self._run_flag = False
@@ -131,27 +156,29 @@ class Ui_MainWindow(object):
         self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_Error.png")) # Error Status
         self.StatusText.setText(_translate("MainWindow", "無效 QR Code")) # Status Text
 
-        # 設定日期與時間文字
-        date = datetime.datetime.now().date()
-        time = datetime.datetime.now().time()
-        self.DateText.setText(_translate("MainWindow", "{} 年 {} 月 {} 日".format(date.year, date.month, date.day)))
-        self.TimeText.setText(_translate("MainWindow", "{} : {}".format("0"+str(time.hour) if time.hour < 10 else time.hour, "0"+str(time.minute) if time.minute < 10 else time.minute)))
-
         # 設定地點文字
         self.Location.setText(_translate("MainWindow", "公館校區"))
 
         # 設定即時影像
-        self.thread = VideoThread()
-        self.thread.change_pixmap_signal.connect(self.update_image)
-        self.thread.start()
+        self.thread_1 = VideoThread()
+        self.thread_1.change_pixmap_signal.connect(self.update_image)
+        self.thread_1.start()
+
+        # 設定日期與時間
+        self.thread_2 = TimeThread()
+        self.thread_2.show_time.connect(self.update_time)
+        self.thread_2.start()
 
     def update_image(self, cv_img):
         qt_img = self.convert_cv_qt(cv_img)
         self.Video.setPixmap(qt_img)
     
+    def update_time(self, date, time):
+        self.DateText.setText(date)
+        self.TimeText.setText(time)
+    
     def convert_cv_qt(self, cv_img):
         rgb_image = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
-        rgb_image = cv2.flip(rgb_image, 1)
         h, w, ch = rgb_image.shape
         bytes_per_line = ch * w
         convert_to_Qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
@@ -159,7 +186,8 @@ class Ui_MainWindow(object):
         return QtGui.QPixmap.fromImage(p)
     
     def closeEvent(self, event):
-        self.thread.stop()
+        self.thread_1.stop()
+        self.thread_2.stop()
         event.accept()
 
 
