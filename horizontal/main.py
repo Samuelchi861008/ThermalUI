@@ -79,7 +79,6 @@ class Ui_MainWindow(object):
         self.NTNULogo.setPixmap(QtGui.QPixmap("img/NB_NTNU_logo.png")) # 設定引入師大 logo 圖片
         self.NTNULogo.setObjectName("NTNULogo")
 
-        self.cap = cv2.VideoCapture(0) # 讀入即時影像 (從camera)
         self.Video = QtWidgets.QLabel(self.centralwidget)
         self.Video.setGeometry(QtCore.QRect(10, 80, 780, 331))
         self.Video.setText("")

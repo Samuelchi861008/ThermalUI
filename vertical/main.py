@@ -52,88 +52,88 @@ class TimeThread(QThread):
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        self.disply_width = 800
-        self.display_height = 480
+        self.disply_width = 480
+        self.display_height = 800
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(self.disply_width, self.display_height) # 設定視窗大小
+        MainWindow.resize(self.disply_width, self.display_height)  # 設定視窗大小
         MainWindow.setStyleSheet("background-color: rgb(129, 50, 52);") # 設定背景顏色
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
         self.Title = QtWidgets.QLabel(self.centralwidget)
-        self.Title.setGeometry(QtCore.QRect(19, 10, 761, 51))
+        self.Title.setGeometry(QtCore.QRect(9, 10, 480, 51))
         font = QtGui.QFont()
         font.setFamily("Hannotate TC")
-        font.setPointSize(36) # 設定標題大小
+        font.setPointSize(36)  # 設定標題大小
         font.setBold(True)
-        font.setWeight(60) # 設定標題粗細
+        font.setWeight(60)  # 設定標題粗細
         self.Title.setFont(font)
         self.Title.setAutoFillBackground(False)
-        self.Title.setStyleSheet("color: rgb(255, 255, 255)") # 設定標題顏色
+        self.Title.setStyleSheet("color: rgb(255, 255, 255)")  # 設定標題顏色
         self.Title.setAlignment(QtCore.Qt.AlignCenter)
         self.Title.setObjectName("Title")
 
         self.NTNULogo = QtWidgets.QLabel(self.centralwidget)
-        self.NTNULogo.setGeometry(QtCore.QRect(10, 420, 261, 51))
+        self.NTNULogo.setGeometry(QtCore.QRect(10, 740, 261, 51))
         self.NTNULogo.setText("")
-        self.NTNULogo.setPixmap(QtGui.QPixmap("img/NB_NTNU_logo.png")) # 設定引入師大 logo 圖片
+        self.NTNULogo.setPixmap(QtGui.QPixmap("img/NB_NTNU_logo.png"))  # 設定引入師大 logo 圖片
         self.NTNULogo.setObjectName("NTNULogo")
 
-        self.cap = cv2.VideoCapture(0) # 讀入即時影像 (從camera)
         self.Video = QtWidgets.QLabel(self.centralwidget)
-        self.Video.setGeometry(QtCore.QRect(10, 80, 780, 331))
+        self.Video.setGeometry(QtCore.QRect(10, 70, 460, 661))
         self.Video.setText("")
         self.Video.setObjectName("Video")
 
         self.Status = QtWidgets.QLabel(self.centralwidget)
-        self.Status.setGeometry(QtCore.QRect(570, 360, 211, 51))
+        self.Status.setGeometry(QtCore.QRect(250, 645, 211, 51))
         self.Status.setStyleSheet("background-color: transparent;")
         self.Status.setText("")
+        self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_Error.png"))
         self.Status.setObjectName("Status")
         self.StatusText = QtWidgets.QLabel(self.centralwidget)
-        self.StatusText.setGeometry(QtCore.QRect(610, 375, 131, 20))
+        self.StatusText.setGeometry(QtCore.QRect(290, 660, 131, 20))
         font = QtGui.QFont()
-        font.setPointSize(14) # 設定狀態框文字大小
+        font.setPointSize(14)  # 設定狀態框文字大小
         font.setBold(True)
-        font.setWeight(70) # 設定狀態框文字粗細
+        font.setWeight(70)  # 設定狀態框文字粗細
         self.StatusText.setFont(font)
         self.StatusText.setStyleSheet("background-color:transparent;")
         self.StatusText.setAlignment(QtCore.Qt.AlignCenter)
         self.StatusText.setObjectName("StatusText")
 
         self.DateTimeArea = QtWidgets.QLabel(self.centralwidget)
-        self.DateTimeArea.setGeometry(QtCore.QRect(20, 80, 201, 121))
+        self.DateTimeArea.setGeometry(QtCore.QRect(10, 90, 201, 121))
         self.DateTimeArea.setStyleSheet("background-color: transparent;")
         self.DateTimeArea.setText("")
-        self.DateTimeArea.setPixmap(QtGui.QPixmap("img/area.png")) # 設定引入日期時間底框圖片
+        self.DateTimeArea.setPixmap(QtGui.QPixmap("img/area.png"))  # 設定引入日期時間底框圖片
         self.DateTimeArea.setObjectName("DateTimeArea")
 
         self.DateText = QtWidgets.QLabel(self.centralwidget)
-        self.DateText.setGeometry(QtCore.QRect(20, 110, 201, 20))
+        self.DateText.setGeometry(QtCore.QRect(10, 120, 201, 20))
         font = QtGui.QFont()
         font.setFamily("Hannotate TC")
         font.setPointSize(16) # 設定日期文字大小
         font.setBold(True)
-        font.setWeight(75) # 設定日期文字粗細
+        font.setWeight(70) # 設定日期文字粗細
         self.DateText.setFont(font)
-        self.DateText.setStyleSheet("background-color: transparent; color:white;") # 設定日期文字顏色
+        self.DateText.setStyleSheet("background-color: transparent; color:white;")
         self.DateText.setAlignment(QtCore.Qt.AlignCenter)
         self.DateText.setObjectName("DateText")
 
         self.TimeText = QtWidgets.QLabel(self.centralwidget)
-        self.TimeText.setGeometry(QtCore.QRect(20, 150, 201, 31))
+        self.TimeText.setGeometry(QtCore.QRect(10, 160, 201, 31))
         font = QtGui.QFont()
         font.setFamily("Hannotate TC")
         font.setPointSize(20) # 設定時間文字大小
         font.setBold(True)
         font.setWeight(75) # 設定時間文字粗細
         self.TimeText.setFont(font)
-        self.TimeText.setStyleSheet("background-color: transparent; color:white;") # 設定時間文字顏色
+        self.TimeText.setStyleSheet("background-color: transparent; color:white;")
         self.TimeText.setAlignment(QtCore.Qt.AlignCenter)
         self.TimeText.setObjectName("TimeText")
 
         self.Location = QtWidgets.QLabel(self.centralwidget)
-        self.Location.setGeometry(QtCore.QRect(710, 440, 71, 21))
+        self.Location.setGeometry(QtCore.QRect(420, 770, 71, 21))
         font = QtGui.QFont()
         font.setFamily("Hannotate TC")
         font.setPointSize(12) # 設定地點文字大小
@@ -168,7 +168,7 @@ class Ui_MainWindow(object):
         self.thread_2 = TimeThread()
         self.thread_2.show_time.connect(self.update_time)
         self.thread_2.start()
-
+    
     def update_image(self, cv_img):
         qt_img = self.convert_cv_qt(cv_img)
         self.Video.setPixmap(qt_img)

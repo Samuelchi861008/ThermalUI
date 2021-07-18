@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>480</height>
+    <width>400</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,9 +20,9 @@
    <widget class="QLabel" name="Title">
     <property name="geometry">
      <rect>
-      <x>19</x>
+      <x>9</x>
       <y>10</y>
-      <width>761</width>
+      <width>381</width>
       <height>51</height>
      </rect>
     </property>
@@ -51,7 +51,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>420</y>
+      <y>740</y>
       <width>261</width>
       <height>51</height>
      </rect>
@@ -63,27 +63,11 @@
      <pixmap>img/NB_NTNU_logo.png</pixmap>
     </property>
    </widget>
-   <widget class="QLabel" name="Video">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>80</y>
-      <width>771</width>
-      <height>331</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>img/QRCodeDemo.png</pixmap>
-    </property>
-   </widget>
    <widget class="QLabel" name="Status">
     <property name="geometry">
      <rect>
-      <x>570</x>
-      <y>360</y>
+      <x>180</x>
+      <y>645</y>
       <width>211</width>
       <height>51</height>
      </rect>
@@ -101,8 +85,8 @@
    <widget class="QLabel" name="StatusText">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>375</y>
+      <x>220</x>
+      <y>660</y>
       <width>131</width>
       <height>20</height>
      </rect>
@@ -127,8 +111,8 @@
    <widget class="QLabel" name="DateTimeArea">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>80</y>
+      <x>10</x>
+      <y>90</y>
       <width>201</width>
       <height>121</height>
      </rect>
@@ -146,8 +130,8 @@
    <widget class="QLabel" name="DateText">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>110</y>
+      <x>10</x>
+      <y>120</y>
       <width>201</width>
       <height>20</height>
      </rect>
@@ -170,11 +154,11 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="TimeText">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>150</y>
+      <x>10</x>
+      <y>160</y>
       <width>201</width>
       <height>31</height>
      </rect>
@@ -197,11 +181,11 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="Location">
     <property name="geometry">
      <rect>
-      <x>710</x>
-      <y>440</y>
+      <x>320</x>
+      <y>770</y>
       <width>71</width>
       <height>21</height>
      </rect>
@@ -221,6 +205,28 @@
      <string>公館校區</string>
     </property>
    </widget>
+   <widget class="QLabel" name="Video">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>70</y>
+      <width>371</width>
+      <height>661</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <zorder>Video</zorder>
+   <zorder>Title</zorder>
+   <zorder>NTNULogo</zorder>
+   <zorder>Status</zorder>
+   <zorder>StatusText</zorder>
+   <zorder>DateTimeArea</zorder>
+   <zorder>DateText</zorder>
+   <zorder>TimeText</zorder>
+   <zorder>Location</zorder>
   </widget>
  </widget>
  <resources/>
