@@ -116,6 +116,13 @@ class Ui_MainWindow(object):
         self.StatusText.setAlignment(QtCore.Qt.AlignCenter)
         self.StatusText.setObjectName("StatusText")
 
+        self.DateTimeArea = QtWidgets.QLabel(self.centralwidget)
+        self.DateTimeArea.setGeometry(QtCore.QRect(20, 245, 201, 121))
+        self.DateTimeArea.setStyleSheet("background-color: transparent;")
+        self.DateTimeArea.setText("")
+        self.DateTimeArea.setPixmap(QtGui.QPixmap("img/area.png")) # 設定引入日期時間底框圖片
+        self.DateTimeArea.setObjectName("DateTimeArea")
+
         self.DateText = QtWidgets.QLabel(self.centralwidget)
         self.DateText.setGeometry(QtCore.QRect(0, 280, 201, 20))
         font = QtGui.QFont()
@@ -129,7 +136,7 @@ class Ui_MainWindow(object):
         self.DateText.setObjectName("DateText")
 
         self.TimeText = QtWidgets.QLabel(self.centralwidget)
-        self.TimeText.setGeometry(QtCore.QRect(0, 300, 201, 31))
+        self.TimeText.setGeometry(QtCore.QRect(0, 310, 201, 31))
         font = QtGui.QFont()
         font.setFamily("Hannotate TC")
         font.setPointSize(16) # 設定時間文字大小
