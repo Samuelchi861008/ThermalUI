@@ -7,6 +7,22 @@ import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QThread
 
+class clearThread(QThread):
+    clearStatus = pyqtSignal(str, str)
+
+    def __init__(self):
+        super().__init__()
+        self._run_flag = True
+
+    def run(self):
+        while self._run_flag:
+            time.sleep(3)
+            self.clearStatus.emit("Clear", "")
+    
+    def stop(self):
+        self._run_flag = False
+        self.wait()
+
 class VideoThread(QThread):
     change_pixmap_signal = pyqtSignal(np.ndarray)
 
@@ -85,13 +101,12 @@ class Ui_MainWindow(object):
         self.Video.setObjectName("Video")
 
         self.Status = QtWidgets.QLabel(self.centralwidget)
-        self.Status.setGeometry(QtCore.QRect(570, 360, 211, 51))
+        self.Status.setGeometry(QtCore.QRect(530, 360, 250, 51))
         self.Status.setStyleSheet("background-color: transparent;")
-        self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_Error.png"))
         self.Status.setText("")
         self.Status.setObjectName("Status")
         self.StatusText = QtWidgets.QLabel(self.centralwidget)
-        self.StatusText.setGeometry(QtCore.QRect(610, 375, 131, 20))
+        self.StatusText.setGeometry(QtCore.QRect(585, 375, 165, 20))
         font = QtGui.QFont()
         font.setPointSize(14) # 設定狀態框文字大小
         font.setBold(True)
@@ -165,6 +180,11 @@ class Ui_MainWindow(object):
         self.thread_2.show_time.connect(self.update_time)
         self.thread_2.start()
 
+        # 設定時間清除文字
+        self.thread_3 = clearThread()
+        self.thread_3.clearStatus.connect(self.update_status)
+        self.thread_3.start()
+
     def update_image(self, cv_img):
         qt_img = self.convert_cv_qt(cv_img)
         self.Video.setPixmap(qt_img)
@@ -176,6 +196,8 @@ class Ui_MainWindow(object):
     def update_status(self, status, text):
         if status == "Error": # Error Status
             self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_Error.png"))
+        elif status == "Clear": # Clear Status
+            self.Status.setPixmap(QtGui.QPixmap(""))
         else: # OK Status
             self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_OK.png"))
         self.StatusText.setText(text) # Status Text
