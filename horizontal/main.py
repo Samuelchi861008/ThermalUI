@@ -87,6 +87,7 @@ class Ui_MainWindow(object):
         self.Status = QtWidgets.QLabel(self.centralwidget)
         self.Status.setGeometry(QtCore.QRect(570, 360, 211, 51))
         self.Status.setStyleSheet("background-color: transparent;")
+        self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_Error.png"))
         self.Status.setText("")
         self.Status.setObjectName("Status")
         self.StatusText = QtWidgets.QLabel(self.centralwidget)
@@ -151,10 +152,6 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.Title.setText(_translate("MainWindow", "智慧額溫 2.0")) # 設定標題文字
 
-        # self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_OK.png")) # OK Status
-        self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_Error.png")) # Error Status
-        self.StatusText.setText(_translate("MainWindow", "無效 QR Code")) # Status Text
-
         # 設定地點文字
         self.Location.setText(_translate("MainWindow", "公館校區"))
 
@@ -171,10 +168,17 @@ class Ui_MainWindow(object):
     def update_image(self, cv_img):
         qt_img = self.convert_cv_qt(cv_img)
         self.Video.setPixmap(qt_img)
-    
+
     def update_time(self, date, time):
         self.DateText.setText(date)
         self.TimeText.setText(time)
+    
+    def update_status(self, status, text):
+        if status == "Error": # Error Status
+            self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_Error.png"))
+        else: # OK Status
+            self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_OK.png"))
+        self.StatusText.setText(text) # Status Text
     
     def convert_cv_qt(self, cv_img):
         rgb_image = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
@@ -188,7 +192,6 @@ class Ui_MainWindow(object):
         self.thread_1.stop()
         self.thread_2.stop()
         event.accept()
-
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
