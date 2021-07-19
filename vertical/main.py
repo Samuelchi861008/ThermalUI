@@ -7,6 +7,22 @@ import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QThread
 
+class clearThread(QThread):
+    clearStatus = pyqtSignal(str, str)
+
+    def __init__(self):
+        super().__init__()
+        self._run_flag = True
+
+    def run(self):
+        while self._run_flag:
+            time.sleep(3)
+            self.clearStatus.emit("Clear", "")
+    
+    def stop(self):
+        self._run_flag = False
+        self.wait()
+
 class VideoThread(QThread):
     change_pixmap_signal = pyqtSignal(np.ndarray)
 
@@ -85,13 +101,12 @@ class Ui_MainWindow(object):
         self.Video.setObjectName("Video")
 
         self.Status = QtWidgets.QLabel(self.centralwidget)
-        self.Status.setGeometry(QtCore.QRect(250, 645, 211, 51))
+        self.Status.setGeometry(QtCore.QRect(220, 510, 250, 51))
         self.Status.setStyleSheet("background-color: transparent;")
         self.Status.setText("")
-        self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_Error.png"))
         self.Status.setObjectName("Status")
         self.StatusText = QtWidgets.QLabel(self.centralwidget)
-        self.StatusText.setGeometry(QtCore.QRect(290, 660, 131, 20))
+        self.StatusText.setGeometry(QtCore.QRect(280, 525, 156, 20))
         font = QtGui.QFont()
         font.setPointSize(14)  # 設定狀態框文字大小
         font.setBold(True)
@@ -101,15 +116,8 @@ class Ui_MainWindow(object):
         self.StatusText.setAlignment(QtCore.Qt.AlignCenter)
         self.StatusText.setObjectName("StatusText")
 
-        self.DateTimeArea = QtWidgets.QLabel(self.centralwidget)
-        self.DateTimeArea.setGeometry(QtCore.QRect(10, 90, 201, 121))
-        self.DateTimeArea.setStyleSheet("background-color: transparent;")
-        self.DateTimeArea.setText("")
-        self.DateTimeArea.setPixmap(QtGui.QPixmap("img/area.png"))  # 設定引入日期時間底框圖片
-        self.DateTimeArea.setObjectName("DateTimeArea")
-
         self.DateText = QtWidgets.QLabel(self.centralwidget)
-        self.DateText.setGeometry(QtCore.QRect(10, 120, 201, 20))
+        self.DateText.setGeometry(QtCore.QRect(0, 280, 201, 20))
         font = QtGui.QFont()
         font.setFamily("Hannotate TC")
         font.setPointSize(16) # 設定日期文字大小
@@ -121,12 +129,12 @@ class Ui_MainWindow(object):
         self.DateText.setObjectName("DateText")
 
         self.TimeText = QtWidgets.QLabel(self.centralwidget)
-        self.TimeText.setGeometry(QtCore.QRect(10, 160, 201, 31))
+        self.TimeText.setGeometry(QtCore.QRect(0, 300, 201, 31))
         font = QtGui.QFont()
         font.setFamily("Hannotate TC")
-        font.setPointSize(20) # 設定時間文字大小
+        font.setPointSize(16) # 設定時間文字大小
         font.setBold(True)
-        font.setWeight(75) # 設定時間文字粗細
+        font.setWeight(70) # 設定時間文字粗細
         self.TimeText.setFont(font)
         self.TimeText.setStyleSheet("background-color: transparent; color:white;")
         self.TimeText.setAlignment(QtCore.Qt.AlignCenter)
@@ -152,10 +160,6 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.Title.setText(_translate("MainWindow", "智慧額溫 2.0")) # 設定標題文字
 
-        # self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_OK.png")) # OK Status
-        self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_Error.png")) # Error Status
-        self.StatusText.setText(_translate("MainWindow", "無效 QR Code")) # Status Text
-
         # 設定地點文字
         self.Location.setText(_translate("MainWindow", "公館校區"))
 
@@ -168,6 +172,11 @@ class Ui_MainWindow(object):
         self.thread_2 = TimeThread()
         self.thread_2.show_time.connect(self.update_time)
         self.thread_2.start()
+
+        # 設定時間清除文字
+        self.thread_3 = clearThread()
+        self.thread_3.clearStatus.connect(self.update_status)
+        self.thread_3.start()
     
     def update_image(self, cv_img):
         qt_img = self.convert_cv_qt(cv_img)
@@ -176,6 +185,15 @@ class Ui_MainWindow(object):
     def update_time(self, date, time):
         self.DateText.setText(date)
         self.TimeText.setText(time)
+
+    def update_status(self, status, text):
+        if status == "Error": # Error Status
+            self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_Error.png"))
+        elif status == "Clear": # Clear Status
+            self.Status.setPixmap(QtGui.QPixmap(""))
+        else: # OK Status
+            self.Status.setPixmap(QtGui.QPixmap("img/NB_QRC_OK.png"))
+        self.StatusText.setText(text) # Status Text
     
     def convert_cv_qt(self, cv_img):
         rgb_image = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
