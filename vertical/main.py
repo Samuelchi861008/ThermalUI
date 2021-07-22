@@ -7,6 +7,7 @@ import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QThread
 
+# 狀態文字自動清除執行緒
 class clearThread(QThread):
     clearStatus = pyqtSignal(str, str)
 
@@ -23,6 +24,7 @@ class clearThread(QThread):
         self._run_flag = False
         self.wait()
 
+# 鏡頭執行緒
 class VideoThread(QThread):
     change_pixmap_signal = pyqtSignal(np.ndarray)
 
@@ -31,6 +33,7 @@ class VideoThread(QThread):
         self._run_flag = True
 
     def run(self):
+        # 開鏡頭
         cap = cv2.VideoCapture(0)
         while self._run_flag:
             ret, cv_img = cap.read()
@@ -42,6 +45,7 @@ class VideoThread(QThread):
         self._run_flag = False
         self.wait()
 
+# 時間跳轉執行緒
 class TimeThread(QThread):
     show_time = pyqtSignal(str, str)
 
@@ -49,10 +53,12 @@ class TimeThread(QThread):
         super().__init__()
         self._run_flag = True
     
+    # 取得現在日期
     def getNowDate(self):
         date = datetime.datetime.now().date()
         return "{} 年 {} 月 {} 日".format(date.year, date.month, date.day)
     
+    # 取得現在時間
     def getNowTime(self):
         time = datetime.datetime.now().time()
         return "{} : {} : {}".format("0"+str(time.hour) if time.hour < 10 else time.hour, "0"+str(time.minute) if time.minute < 10 else time.minute, "0"+str(time.second) if time.second < 10 else time.second)
@@ -66,12 +72,13 @@ class TimeThread(QThread):
         self._run_flag = False
         self.wait()
 
+# 介面
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        self.disply_width = 480
-        self.display_height = 800
+        self.disply_width = 480 # 視窗寬
+        self.display_height = 800 # 視窗高
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(self.disply_width, self.display_height)  # 設定視窗大小
+        MainWindow.resize(self.disply_width, self.display_height) # 設定視窗大小
         MainWindow.setStyleSheet("background-color: rgb(129, 50, 52);") # 設定背景顏色
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -80,51 +87,49 @@ class Ui_MainWindow(object):
         self.Title.setGeometry(QtCore.QRect(9, 10, 480, 51))
         font = QtGui.QFont()
         font.setFamily("Hannotate TC")
-        font.setPointSize(36)  # 設定標題大小
+        font.setPointSize(36) # 設定標題大小
         font.setBold(True)
-        font.setWeight(60)  # 設定標題粗細
+        font.setWeight(60) # 設定標題粗細
         self.Title.setFont(font)
         self.Title.setAutoFillBackground(False)
-        self.Title.setStyleSheet("color: rgb(255, 255, 255)")  # 設定標題顏色
+        self.Title.setStyleSheet("color: rgb(255, 255, 255)") # 設定標題顏色
         self.Title.setAlignment(QtCore.Qt.AlignCenter)
         self.Title.setObjectName("Title")
 
         self.NTNULogo = QtWidgets.QLabel(self.centralwidget)
         self.NTNULogo.setGeometry(QtCore.QRect(10, 740, 261, 51))
-        self.NTNULogo.setText("")
-        self.NTNULogo.setPixmap(QtGui.QPixmap("img/NB_NTNU_logo.png"))  # 設定引入師大 logo 圖片
+        self.NTNULogo.setPixmap(QtGui.QPixmap("img/NB_NTNU_logo.png")) # 設定引入師大 logo 圖片
         self.NTNULogo.setObjectName("NTNULogo")
 
         self.Video = QtWidgets.QLabel(self.centralwidget)
         self.Video.setGeometry(QtCore.QRect(10, 70, 460, 661))
-        self.Video.setText("")
         self.Video.setObjectName("Video")
+        self.Video.setAlignment(QtCore.Qt.AlignCenter)
 
         self.Status = QtWidgets.QLabel(self.centralwidget)
-        self.Status.setGeometry(QtCore.QRect(220, 510, 250, 51))
+        self.Status.setGeometry(QtCore.QRect(220, 670, 250, 51))
         self.Status.setStyleSheet("background-color: transparent;")
-        self.Status.setText("")
         self.Status.setObjectName("Status")
+        
         self.StatusText = QtWidgets.QLabel(self.centralwidget)
-        self.StatusText.setGeometry(QtCore.QRect(280, 525, 156, 20))
+        self.StatusText.setGeometry(QtCore.QRect(280, 685, 156, 20))
         font = QtGui.QFont()
-        font.setPointSize(14)  # 設定狀態框文字大小
+        font.setPointSize(14) # 設定狀態框文字大小
         font.setBold(True)
-        font.setWeight(70)  # 設定狀態框文字粗細
+        font.setWeight(70) # 設定狀態框文字粗細
         self.StatusText.setFont(font)
         self.StatusText.setStyleSheet("background-color:transparent;")
         self.StatusText.setAlignment(QtCore.Qt.AlignCenter)
         self.StatusText.setObjectName("StatusText")
 
         self.DateTimeArea = QtWidgets.QLabel(self.centralwidget)
-        self.DateTimeArea.setGeometry(QtCore.QRect(20, 245, 201, 121))
+        self.DateTimeArea.setGeometry(QtCore.QRect(20, 100, 201, 121))
         self.DateTimeArea.setStyleSheet("background-color: transparent;")
-        self.DateTimeArea.setText("")
         self.DateTimeArea.setPixmap(QtGui.QPixmap("img/area.png")) # 設定引入日期時間底框圖片
         self.DateTimeArea.setObjectName("DateTimeArea")
 
         self.DateText = QtWidgets.QLabel(self.centralwidget)
-        self.DateText.setGeometry(QtCore.QRect(0, 280, 201, 20))
+        self.DateText.setGeometry(QtCore.QRect(0, 135, 201, 20))
         font = QtGui.QFont()
         font.setFamily("Hannotate TC")
         font.setPointSize(16) # 設定日期文字大小
@@ -136,7 +141,7 @@ class Ui_MainWindow(object):
         self.DateText.setObjectName("DateText")
 
         self.TimeText = QtWidgets.QLabel(self.centralwidget)
-        self.TimeText.setGeometry(QtCore.QRect(0, 310, 201, 31))
+        self.TimeText.setGeometry(QtCore.QRect(0, 165, 201, 31))
         font = QtGui.QFont()
         font.setFamily("Hannotate TC")
         font.setPointSize(16) # 設定時間文字大小
@@ -164,7 +169,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "DayPass"))
         self.Title.setText(_translate("MainWindow", "智慧額溫 2.0")) # 設定標題文字
 
         # 設定地點文字
@@ -207,12 +212,13 @@ class Ui_MainWindow(object):
         h, w, ch = rgb_image.shape
         bytes_per_line = ch * w
         convert_to_Qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
-        p = convert_to_Qt_format.scaled(self.disply_width, self.display_height, Qt.KeepAspectRatio)
+        p = convert_to_Qt_format.scaled(600, 600, Qt.KeepAspectRatioByExpanding) # 設定影像大小
         return QtGui.QPixmap.fromImage(p)
     
     def closeEvent(self, event):
         self.thread_1.stop()
         self.thread_2.stop()
+        self.thread_3.stop()
         event.accept()
 
 
